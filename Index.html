@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Camino a los 60 | Ramón Quijada Grijalva</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI",sans-serif;
+    background:#020617;
+    overflow:hidden;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#stars{
+    position:fixed;
+    inset:0;
+}
+
+.moon{
+    position:fixed;
+    top:70px;
+    right:120px;
+    width:140px;
+    height:140px;
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+        circle at 30% 30%,
+        #fff,
+        #f1f5f9 55%,
+        #cbd5e1 100%
+    );
+
+    box-shadow:
+        0 0 40px rgba(255,255,255,.5),
+        0 0 90px rgba(255,255,255,.3);
+
+    animation:
+        glow 5s ease-in-out infinite,
+        moveMoon 80s linear infinite;
+
+    z-index:2;
+}
+
+.moon::before{
+    content:"";
+    position:absolute;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    top:35px;
+    left:30px;
+
+    background:rgba(120,120,120,.20);
+
+    box-shadow:
+        40px 15px 0 rgba(120,120,120,.18),
+        15px 55px 0 rgba(120,120,120,.15),
+        55px 45px 0 rgba(120,120,120,.12);
+}
+
+@keyframes glow{
+    0%,100%{
+        filter:brightness(1);
+    }
+
+    50%{
+        filter:brightness(1.25);
+    }
+}
+
+@keyframes moveMoon{
+    0%{
+        transform:translateX(0);
+    }
+
+    50%{
+        transform:translateX(-100px);
+    }
+
+    100%{
+        transform:translateX(0);
+    }
+}
+
+.card{
+    position:relative;
+    z-index:10;
+    width:90%;
+    max-width:900px;
+
+    background:rgba(15,23,42,.70);
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:30px;
+
+    padding:40px;
+
+    color:white;
+
+    box-shadow:
+        0 0 50px rgba(59,130,246,.20);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:3rem;
+}
+
+.subtitle{
+    text-align:center;
+    color:#cbd5e1;
+    margin-bottom:35px;
+}
+
+.contador{
+    text-align:center;
+    font-size:4rem;
+    font-weight:800;
+    color:#60a5fa;
+}
+
+.label{
+    text-align:center;
+    color:#cbd5e1;
+    margin-top:10px;
+}
+
+.stats{
+
+    margin-top:35px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(200px,1fr));
+
+    gap:20px;
+}
+
+.stat{
+    background:rgba(255,255,255,.05);
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+}
+
+.stat h3{
+    margin-bottom:10px;
+    color:#93c5fd;
+}
+
+.valor{
+    font-size:1.8rem;
+    font-weight:bold;
+}
+
+.progress{
+    margin-top:35px;
+}
+
+.progress-bar{
+    margin-top:10px;
+    height:24px;
+    background:#0f172a;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:0;
+    background:
+    linear-gradient(
+        90deg,
+        #3b82f6,
+        #22c55e
+    );
+}
+
+.porcentaje{
+    text-align:right;
+    color:#cbd5e1;
+    margin-top:10px;
+}
+
+.footer{
+    margin-top:25px;
+    text-align:center;
+    color:#94a3b8;
+}
+
+@media(max-width:700px){
+
+    h1{
+        font-size:2rem;
+    }
+
+    .contador{
+        font-size:2.8rem;
+    }
+
+    .moon{
+        width:90px;
+        height:90px;
+        right:20px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="moon"></div>
+
+<div class="card">
+
+    <h1>🌟 Camino a los 60</h1>
+
+    <div class="subtitle">
+        Ramón Quijada Grijalva<br>
+        30 abril 1970 → 30 abril 2030
+    </div>
+
+    <div id="dias" class="contador"></div>
+
+    <div class="label">
+        días para cumplir 60 años
+    </div>
+
+    <div class="stats">
+
+        <div class="stat">
+            <h3>Edad Actual</h3>
+            <div id="edad" class="valor"></div>
+        </div>
+
+        <div class="stat">
+            <h3>Días Vividos</h3>
+            <div id="vividos" class="valor"></div>
+        </div>
+
+        <div class="stat">
+            <h3>Días Restantes</h3>
+            <div id="restantes" class="valor"></div>
+        </div>
+
+    </div>
+
+    <div class="progress">
+
+        <div>
+            Avance hacia los 60 años
+        </div>
+
+        <div class="progress-bar">
+            <div
+                id="barra"
+                class="progress-fill">
+            </div>
+        </div>
+
+        <div
+            id="porcentaje"
+            class="porcentaje">
+        </div>
+
+    </div>
+
+    <div class="footer">
+        ⏳ Cada día cuenta
+    </div>
+
+</div>
+
+<script>
+
+// CONTADOR
+
+const nacimiento =
+new Date("1970-04-30");
+
+const objetivo =
+new Date("2030-04-30");
+
+function actualizar(){
+
+    const ahora = new Date();
+
+    const diasVividos =
+    Math.floor(
+        (ahora - nacimiento) /
+        86400000
+    );
+
+    const diasTotales =
+    Math.floor(
+        (objetivo - nacimiento) /
+        86400000
+    );
+
+    const diasRestantes =
+    Math.floor(
+        (objetivo - ahora) /
+        86400000
+    );
+
+    const edad =
+    Math.floor(
+        (ahora - nacimiento) /
+        (365.2425*24*60*60*1000)
+    );
+
+    const avance =
+    ((diasVividos/diasTotales)*100)
+    .toFixed(2);
+
+    document.getElementById("dias")
+    .innerText =
+    diasRestantes.toLocaleString();
+
+    document.getElementById("edad")
+    .innerText =
+    edad + " años";
+
+    document.getElementById("vividos")
+    .innerText =
+    diasVividos.toLocaleString();
+
+    document.getElementById("restantes")
+    .innerText =
+    diasRestantes.toLocaleString();
+
+    document.getElementById("barra")
+    .style.width =
+    avance + "%";
+
+    document.getElementById("porcentaje")
+    .innerText =
+    avance + "% completado";
+}
+
+actualizar();
+setInterval(actualizar,1000);
+
+// CIELO ESTRELLADO
+
+const canvas =
+document.getElementById("stars");
+
+const ctx =
+canvas.getContext("2d");
+
+function resize(){
+
+    canvas.width =
+    window.innerWidth;
+
+    canvas.height =
+    window.innerHeight;
+}
+
+resize();
+
+window.addEventListener(
+"resize",
+resize
+);
+
+const stars=[];
+
+for(let i=0;i<300;i++){
+
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2,
+        a:Math.random(),
+        v:(Math.random()*0.02)+0.002
+    });
+}
+
+function animate(){
+
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
+
+    stars.forEach(s=>{
+
+        s.a += s.v;
+
+        if(
+            s.a > 1 ||
+            s.a < 0
+        ){
+            s.v *= -1;
+        }
+
+        ctx.beginPath();
+
+        ctx.arc(
+            s.x,
+            s.y,
+            s.r,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fillStyle =
+        `rgba(255,255,255,${s.a})`;
+
+        ctx.fill();
+    });
+
+    requestAnimationFrame(
+        animate
+    );
+}
+
+animate();
+
+// ESTRELLA FUGAZ
+
+function shootingStar(){
+
+    let x =
+    Math.random()*canvas.width;
+
+    let y =
+    Math.random()*200;
+
+    let p = 0;
+
+    function draw(){
+
+        p += 15;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x+p,
+            y+p
+        );
+
+        ctx.lineTo(
+            x-200+p,
+            y-200+p
+        );
+
+        ctx.strokeStyle =
+        "rgba(255,255,255,.9)";
+
+        ctx.lineWidth = 2;
+
+        ctx.stroke();
+
+        if(
+            p < canvas.width
+        ){
+            requestAnimationFrame(draw);
+        }
+    }
+
+    draw();
+}
+
+setInterval(
+shootingStar,
+8000
+);
+
+</script>
+
+</body>
+</html>
